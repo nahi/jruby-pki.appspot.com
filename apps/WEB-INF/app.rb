@@ -116,9 +116,7 @@ def do_pkcs7
     password = "password"
     cert = OpenSSL::X509::Certificate.new(CERT_PEM)
     certs = [cert]
-    # BUG! of jruby-openssl
-    #cipher = OpenSSL::Cipher.new("des-ede3-cbc")
-    cipher = OpenSSL::Cipher.new("aes-128-cbc")
+    cipher = OpenSSL::Cipher.new("des-ede3-cbc")
     cipher.encrypt
     cipher.pkcs5_keyivgen(password)
     p7 = OpenSSL::PKCS7.encrypt(certs, msg, cipher, OpenSSL::PKCS7::BINARY)
