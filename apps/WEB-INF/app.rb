@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'openssl'
+require 'digest'
 
 get '/' do
   result = []
@@ -11,6 +12,8 @@ get '/' do
   result << do_bn
   result << "Digest test"
   result << do_digest
+  result << "ext Digest test"
+  result << do_ext_digest
   result << "Cipher test"
   result << do_cipher
   result << "Random test"
@@ -25,7 +28,7 @@ get '/' do
   result << "PKCS#7 test"
   result << do_pkcs7
 
-  result.map { |str|
+  result.flatten.map { |str|
     Rack::Utils.escape_html(str)
   }.join('<br/>')
 end
@@ -53,12 +56,13 @@ end
 
 def do_digest
   protect do
-    msg = 'Hello World'
-    #digester = OpenSSL::Digest::Digest.new("MD5")
-    digester = OpenSSL::Digest::MD5.new
-    digester << msg
-    digest = digester.hexdigest
-    "-> OK: #{msg} -> #{digest}"
+    [OpenSSL::Digest::MD5, OpenSSL::Digest::SHA1, OpenSSL::Digest::SHA256, OpenSSL::Digest::SHA512].map { |klass|
+      msg = 'Hello World'
+      digester = klass.new
+      digester << msg
+      digest = digester.hexdigest
+      "-> OK: #{msg} -(#{klass})-> #{digest}"
+    }
   end
 end
 
@@ -121,6 +125,18 @@ def do_pkcs7
     cipher.pkcs5_keyivgen(password)
     p7 = OpenSSL::PKCS7.encrypt(certs, msg, cipher, OpenSSL::PKCS7::BINARY)
     "-> OK: #{msg} -> #{p7.data}"
+  end
+end
+
+def do_ext_digest
+  protect do
+    [Digest::MD5, Digest::SHA1, Digest::SHA256, Digest::SHA512].map { |klass|
+      msg = 'Hello World'
+      digester = klass.new
+      digester << msg
+      digest = digester.hexdigest
+      "-> OK: #{msg} -(#{klass})-> #{digest}"
+    }
   end
 end
 

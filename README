@@ -1,11 +1,11 @@
 Sinatra + jruby-rack app for http://jruby-pki.appspot.com/
 
 You need to add following jars in WEB-INF/lib. (tested version)
-  * appengine-api jar (appengine-api-1.0-sdk-1.3.1.jar)
-  * jruby jar (jruby-complete.jar for 1.5.0dev)
+  * appengine-api jar (appengine-api-1.0-sdk-1.3.2.jar)
+  * jruby jar (jruby-complete.jar for 1.5.0.dev)
   * jruby-rack jar (jruby-rack-0.9.7-SNAPSHOT.jar)
 
 You need to add following gems in WEB-INF/gems.
   * rack-1.1.0.gemspec
-  * sinatra-0.9.4.gemspec
+  * sinatra-1.0.0.gemspec
   * jruby-openssl-0.6.1.gemspec
